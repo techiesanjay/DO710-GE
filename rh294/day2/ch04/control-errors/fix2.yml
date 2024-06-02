@@ -1,0 +1,31 @@
+# NOTE: This playbook is the playbook at the end of step 7.2
+#       Please run this playbook as per instructions in step 8.1 but change the name of the playbook to fix2.yml
+#       When the playbook runs you will find that the run-time error is now handled by ansible with a rescue
+#       Lastly as per step 8.2 change web_pachage: to httpd and run the fix2.yml playbook again
+#       This time the run-time error will not occur and therefore recuse task will not run
+#       After this move to playbook fix3.yml
+
+---
+- name: Task Failure Exercise
+  hosts: databases
+  vars:
+    web_package: http
+    db_package: mariadb-server
+    db_service: mariadb
+  tasks:
+    - name: Attempt to set up a webserver
+      block:
+        - name: Install {{ web_package }} package
+          ansible.builtin.dnf:
+            name: "{{ web_package }}"
+            state: present
+      rescue:
+        - name: Install {{ db_package }} package
+          ansible.builtin.dnf:
+            name: "{{ db_package }}"
+            state: present
+      always:
+        - name: Start {{ db_service }} service
+          ansible.builtin.service:
+            name: "{{ db_service }}"
+            state: started

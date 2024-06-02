@@ -1,0 +1,38 @@
+# NOTE: This playbook is the playbook at the end of step 10.1
+#       Please run this playbook as per instructions in step 10.2 but use  name of the playbook as fix4.yml
+#       When the playbook runs you will observe that the playbook generates a run-time error as failed_when kicks in
+#       However the playbook continues to run as the run-time error occured within block and rescue 
+
+---
+- name: Task Failure Exercise
+  hosts: databases
+  vars:
+    web_package: httpd
+    db_package: mariadb-server
+    db_service: mariadb
+  tasks:
+    - name: Check local time
+      ansible.builtin.command: date
+      register: command_result
+
+    - name: Print local time
+      ansible.builtin.debug:
+        var: command_result.stdout
+
+    - name: Attempt to set up a webserver
+      block:
+        - name: Install {{ web_package }} package
+          ansible.builtin.dnf:
+            name: "{{ web_package }}"
+            state: present
+          failed_when: web_package == "httpd"
+      rescue:
+        - name: Install {{ db_package }} package
+          ansible.builtin.dnf:
+            name: "{{ db_package }}"
+            state: present
+      always:
+        - name: Start {{ db_service }} service
+          ansible.builtin.service:
+            name: "{{ db_service }}"
+            state: started

@@ -1,0 +1,22 @@
+# NOTE: This playbook is the playbook at the end of step 3.2
+#       Please run this playbook as per instructions in step 4
+#       In step 4 when you run the playbook you will get a run time error which is expected
+#       Please look at the interim fix as per playbook: fix1.yml
+
+---
+- name: Task Failure Exercise
+  hosts: databases
+  vars:
+    web_package: http
+    db_package: mariadb-server
+    db_service: mariadb
+  tasks:
+    - name: Install {{ web_package }} package
+      ansible.builtin.dnf:
+        name: "{{ web_package }}"
+        state: present
+
+    - name: Install {{ db_package }} package
+      ansible.builtin.dnf:
+        name: "{{ db_package }}"
+        state: present

@@ -1,0 +1,11 @@
+---
+- name: Check httpd status
+  hosts: webserver
+  tasks:
+    - name: Check httpd status
+      command: systemctl status httpd
+      register: result
+
+    - name: Display http status
+      debug:
+        var: result

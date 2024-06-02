@@ -1,0 +1,11 @@
+---
+- name: Remove scheduled cron job
+  hosts: webservers
+  become: true
+  tasks:
+  - name: Removed the system crontab
+    ansible.builtin.cron:
+      name: Add date and time to a file
+      user: devops
+      cron_file: add-date-time
+      state: absent

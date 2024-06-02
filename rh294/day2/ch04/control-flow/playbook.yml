@@ -1,0 +1,23 @@
+# NOTE: The playbook below is after completing step 3.3
+#       You must do step 4 to run this playbook
+#       You must make the necessary changes to this playbook befor running step 5
+
+- name: MariaDB server is running
+  hosts: database_dev                                           # Change the hosts: to database_prod as part of step 5
+  vars:
+    mariadb_packages:
+      - mariadb-server
+      - python3-PyMySQL
+  tasks:
+    - name: MariaDB packages are installed
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ mariadb_packages }}"
+      #when: ansible_facts['distribution'] == "RedHat"          # Uncomment this line at the beginning as part of step 5
+
+    - name: Start MariaDB service
+      ansible.builtin.service:
+        name: mariadb
+        state: started
+        enabled: true

@@ -1,0 +1,13 @@
+---
+- name: Use the fetch module to retrieve secure log files
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: Copy a file to managed hosts and set attributes
+      ansible.builtin.copy:
+        src: files/users.txt
+        dest: /home/devops/users.txt
+        owner: devops
+        group: devops
+        mode: u+rw,g-wx,o-rwx
+        setype: samba_share_t

@@ -1,0 +1,24 @@
+# NOTE: This playbook is the playbook at the end of step 5
+#       Please run this playbook as per instructions in step 6 but change the name of the playbook to fix1.yml
+#       When the playbook runs you will find that the run-time error is now getting ignored
+#       Please look at the next playbook: fix2.yml
+#       This playbook will implement block and rescue
+
+---
+- name: Task Failure Exercise
+  hosts: databases
+  vars:
+    web_package: http
+    db_package: mariadb-server
+    db_service: mariadb
+  tasks:
+    - name: Install {{ web_package }} package
+      ansible.builtin.dnf:
+        name: "{{ web_package }}"
+        state: present
+      ignore_errors: yes
+
+    - name: Install {{ db_package }} package
+      ansible.builtin.dnf:
+        name: "{{ db_package }}"
+        state: present

@@ -1,0 +1,9 @@
+The collections folder was removed along with the collection tarball
+
+Please run the lab script for this guided exercise and copy the system role collection tarball into this directory
+
+Follow step 2.4 to install the collection tarball into this folder
+
+The playbook and other items are complete
+
+Proceed to run the playbook on step 7.2

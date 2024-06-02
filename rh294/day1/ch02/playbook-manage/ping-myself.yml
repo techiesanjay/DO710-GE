@@ -1,0 +1,9 @@
+---
+- name: Validate inventory hosts
+  hosts: workstation
+  gather_facts: no
+
+  tasks:
+
+    - name: Ping workstation
+      ansible.builtin.ping:

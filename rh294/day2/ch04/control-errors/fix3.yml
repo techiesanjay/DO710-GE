@@ -1,0 +1,38 @@
+# NOTE: This playbook is the playbook at the end of step 9.1
+#       Please run this playbook as per instructions in step 9.2 but use  name of the playbook as fix3.yml
+#       When the playbook runs you will observe that the command mode shows a state change when there is none
+#       Continue to follow instructions uptil step 9.4 but use the playbook name as fix3.yml while running
+#       Playbook for step 10 will be fix4.yml
+
+---
+- name: Task Failure Exercise
+  hosts: databases
+  vars:
+    web_package: httpd
+    db_package: mariadb-server
+    db_service: mariadb
+  tasks:
+    - name: Check local time
+      ansible.builtin.command: date
+      register: command_result
+
+    - name: Print local time
+      ansible.builtin.debug:
+        var: command_result.stdout
+
+    - name: Attempt to set up a webserver
+      block:
+        - name: Install {{ web_package }} package
+          ansible.builtin.dnf:
+            name: "{{ web_package }}"
+            state: present
+      rescue:
+        - name: Install {{ db_package }} package
+          ansible.builtin.dnf:
+            name: "{{ db_package }}"
+            state: present
+      always:
+        - name: Start {{ db_service }} service
+          ansible.builtin.service:
+            name: "{{ db_service }}"
+            state: started
